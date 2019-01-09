@@ -15,6 +15,7 @@ public class MainUI extends JFrame implements ActionListener  {
 
     // 定义组件
     JButton EnterBtn,EmptyBtn; // 定义确认按钮
+    JMenuItem MenuAbout;
     JLabel appName,packgeName,versionCode,versionName,minSdk,provisionName,AppIDName,UUID,TeamName,ExpirationDate;
 
     public static void main(String[] args) {
@@ -29,6 +30,12 @@ public class MainUI extends JFrame implements ActionListener  {
         EmptyBtn = new JButton("清空");
         EnterBtn.addActionListener(this);
         EmptyBtn.addActionListener(this);
+
+        //初始化一个菜单栏
+        JMenuBar menuBar = new JMenuBar();
+        MenuAbout = new JMenuItem("About");
+        menuBar.add(MenuAbout);
+        myEvent();  // 加载菜单栏监听事件处理
 
         getContentPane().add(new JLabel("appName：", SwingConstants.CENTER ));
         appName = new JLabel("CFBundleName");
@@ -73,6 +80,7 @@ public class MainUI extends JFrame implements ActionListener  {
         getContentPane().add(EnterBtn);
         getContentPane().add(EmptyBtn);
 
+        this.setJMenuBar(menuBar);	//设置菜单栏
         this.setLayout(new GridLayout(0,2));    //选择GridLayout布局管理器
         this.setTitle("iOS-checkIPA");
         this.setSize(700,400);
@@ -81,6 +89,22 @@ public class MainUI extends JFrame implements ActionListener  {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    //设置当关闭窗口时，保证JVM也退出
         this.setVisible(true);
         this.setResizable(true);
+        
+    }
+
+
+    // 菜单栏监听
+    private void myEvent()
+    {
+        // About 菜单栏监听
+        MenuAbout.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                JOptionPane.showMessageDialog(null, "Author: Benjamin\nWeChat: WeChat_Benjamin\nEmail: Benjamin_v@qq.com", "AboutInfo",JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+        });
     }
 
 
