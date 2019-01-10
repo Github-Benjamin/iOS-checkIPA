@@ -14,6 +14,7 @@ import java.io.File;
 public class MainUI extends JFrame implements ActionListener  {
 
     // 定义组件
+    private static FileDialog openDia; // 文件打开窗口
     JButton EnterBtn,EmptyBtn; // 定义确认按钮
     JMenuItem MenuAbout;
     JLabel appName,packgeName,versionCode,versionName,minSdk,provisionName,AppIDName,UUID,TeamName,ExpirationDate;
@@ -80,6 +81,8 @@ public class MainUI extends JFrame implements ActionListener  {
         getContentPane().add(EnterBtn);
         getContentPane().add(EmptyBtn);
 
+        openDia = new FileDialog(this, "打开", FileDialog.LOAD);
+
         this.setJMenuBar(menuBar);	//设置菜单栏
         this.setLayout(new GridLayout(0,2));    //选择GridLayout布局管理器
         this.setTitle("iOS-checkIPA");
@@ -89,7 +92,7 @@ public class MainUI extends JFrame implements ActionListener  {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    //设置当关闭窗口时，保证JVM也退出
         this.setVisible(true);
         this.setResizable(true);
-        
+
     }
 
 
@@ -113,28 +116,41 @@ public class MainUI extends JFrame implements ActionListener  {
     public void actionPerformed(ActionEvent e) {
 
         if(e.getActionCommand()=="获取设备信息") {
-            File files = new File("C:\\Users\\xielianshi\\Desktop\\ipone.ipa");
-            try {
-                IpaUtil.getIpaMobileProvisio(files);
-            } catch (Exception e1) {
-                JOptionPane.showMessageDialog(null,"读取ipa文件异常，请联系作者：benjamin_v@qq.com","提示消息",JOptionPane.WARNING_MESSAGE);
-                e1.printStackTrace();
+
+            getFilePath();  // 获取文件路径
+            String filePath = ipaInfo.getFilePath();
+            if ( filePath == null ){    //判断路径和文件是否为空
+                // JOptionPane.showMessageDialog(null,"选择文件异常，请重新选择文件","提示消息",JOptionPane.WARNING_MESSAGE);
+                return;
+            } else {
+                File files = new File(filePath);    // 获取ipa文件路径
+                try {
+                    IpaUtil.getIpaMobileProvisio(files);    // 获取并分析文件信息
+                } catch (Exception e1) {
+                    JOptionPane.showMessageDialog(null,"读取ipa文件异常，请联系作者：benjamin_v@qq.com","提示消息",JOptionPane.WARNING_MESSAGE);
+                    e1.printStackTrace();
+                    return;
+                }
+
+                appName.setText(ipaInfo.getAppName());
+                packgeName.setText(ipaInfo.getPackgeName());
+                versionCode.setText(ipaInfo.getVersionCode());
+                versionName.setText(ipaInfo.getVersionName());
+                minSdk.setText(ipaInfo.getMinSdk());
+                provisionName.setText(ipaInfo.getProvisionName());
+                AppIDName.setText(ipaInfo.getAppIDName());
+                UUID.setText(ipaInfo.getUUID());
+                TeamName.setText(ipaInfo.getTeamName());
+                ExpirationDate.setText(ipaInfo.getExpirationDate());
+                return;
             }
-            appName.setText(ipaInfo.getAppName());
-            packgeName.setText(ipaInfo.getPackgeName());
-            versionCode.setText(ipaInfo.getVersionCode());
-            versionName.setText(ipaInfo.getVersionName());
-            minSdk.setText(ipaInfo.getMinSdk());
-            provisionName.setText(ipaInfo.getProvisionName());
-            AppIDName.setText(ipaInfo.getAppIDName());
-            UUID.setText(ipaInfo.getUUID());
-            TeamName.setText(ipaInfo.getTeamName());
-            ExpirationDate.setText(ipaInfo.getExpirationDate());
-            return;
 
         }
 
         else if(e.getActionCommand() == "清空" ){
+
+            Object ipaInfo=new ipaInfo();
+            ipaInfo = null; // 清空对象,对象被赋值为null将被视为垃圾
 
             appName.setText("NaN");
             packgeName.setText("NaN");
@@ -151,5 +167,20 @@ public class MainUI extends JFrame implements ActionListener  {
         }
 
     }
+
+    // 弹出窗口选择获取文件路径
+    public static void getFilePath(){
+        openDia.setVisible(true);    // 显示打开文件对话框
+        String dirpath = openDia.getDirectory();    //获取打开文件路径并保存到字符串中。
+        String fileName = openDia.getFile();    //获取打开文件名称并保存到字符串中
+        // System.out.println(dirpath+fileName);    // 打印获取到的文件路径
+        if (dirpath == null || fileName == null){   //判断路径和文件是否为空
+            return;
+        }else {
+            ipaInfo.setFilePath(dirpath+fileName);
+            return;
+        }
+    }
+
 
 }

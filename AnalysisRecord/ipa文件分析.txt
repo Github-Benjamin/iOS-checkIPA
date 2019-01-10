@@ -1,0 +1,43 @@
+
+
+
+iOS Info.plist
+Android AndroidManifest.xml
+
+在线解析：
+http://www.atool.org/plist_reader.php
+
+扫毒报告：
+https://www.virustotal.com/zh-cn/file/fd23a30f2f6d2f1b0b2aae18e4f5be3adbe3a05752937cbcdfd5a362dbe26ae5/analysis/1546943243/
+
+
+
+----------------
+  文件基本信息
+----------------
+
+CFBundleIconFiles icon
+
+CFBundleName | name
+CFBundleIdentifier | packge
+CFBundleShortVersionString | versionName
+CFBundleVersion | versionCode
+MinimumOSVersion | Min.SDK
+证书MD5 | 目前缺失
+
+
+文件信息：
+文件名路径
+MD5
+大小
+
+
+
+签名信息：embedded.mobileprovision
+
+Name | string | iOS Team Inhouse Provisioning Profile: xxx
+AppIDName | string | XC com xxx 
+UUID | string | xxx
+TeamName | string | xxx
+CreationDate | date 无需要该信息 | 2018-04-28T06:52:43Z
+ExpirationDate | date | 2018-12-15T04:23:56Z

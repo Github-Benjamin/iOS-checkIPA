@@ -17,6 +17,7 @@ public class ipaInfo {
     public static String UUID;
     public static String TeamName;
     public static String ExpirationDate;
+    public static String filePath;
     public static File mobileprovision;
 
 
@@ -98,6 +99,14 @@ public class ipaInfo {
 
     public static void setExpirationDate(String expirationDate) {
         ExpirationDate = expirationDate;
+    }
+
+    public static String getFilePath() {
+        return filePath;
+    }
+
+    public static void setFilePath(String filePath) {
+        ipaInfo.filePath = filePath;
     }
 
     public static File getMobileprovision() {
