@@ -48,6 +48,7 @@ public class FileUtils {
         return filedata;
     }
 
+    // 判断文件后缀名并存储到实体类中
     public static void fileName(String dirpath,String filename){
 
         if ( filename.substring(filename.length() - 3).equals("ipa") ){ //文件后缀名是否包含 ipa
