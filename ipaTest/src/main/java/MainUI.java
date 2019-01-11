@@ -18,7 +18,7 @@ public class MainUI extends JFrame implements ActionListener  {
     private static FileDialog openDia; // 文件打开窗口
     JButton EnterBtn,EmptyBtn; // 定义确认按钮
     JMenuItem MenuAbout;
-    JLabel appName,packgeName,versionCode,versionName,minSdk,provisionName,AppIDName,UUID,TeamName,ExpirationDate;
+    JLabel ipainfo,noneline,fileinfo,appName,packgeName,versionCode,versionName,minSdk,provisionName,AppIDName,UUID,TeamName,ExpirationDate,filePaths,fileMD5,fileSize;
 
     public static void main(String[] args) {
         MainUI mUI=new MainUI();
@@ -38,6 +38,10 @@ public class MainUI extends JFrame implements ActionListener  {
         MenuAbout = new JMenuItem("About");
         menuBar.add(MenuAbout);
         myEvent();  // 加载菜单栏监听事件处理
+
+        getContentPane().add(new JLabel("IPA 信息", SwingConstants.CENTER ));
+        ipainfo = new JLabel("");
+        getContentPane().add(ipainfo);
 
         getContentPane().add(new JLabel("appName：", SwingConstants.CENTER ));
         appName = new JLabel("CFBundleName");
@@ -79,6 +83,30 @@ public class MainUI extends JFrame implements ActionListener  {
         ExpirationDate = new JLabel("ExpirationDate", SwingConstants.LEFT );
         getContentPane().add(ExpirationDate);
 
+        getContentPane().add(new JLabel("   ", SwingConstants.CENTER ));
+        noneline = new JLabel(" ");
+        getContentPane().add(noneline);
+
+        getContentPane().add(new JLabel("文件信息", SwingConstants.CENTER ));
+        fileinfo = new JLabel("");
+        getContentPane().add(fileinfo);
+
+        getContentPane().add(new JLabel("filePath：", SwingConstants.CENTER ));
+        filePaths = new JLabel("filePath");
+        getContentPane().add(filePaths);
+
+        getContentPane().add(new JLabel("fileMD5：", SwingConstants.CENTER ));
+        fileMD5 = new JLabel("fileMD5");
+        getContentPane().add(fileMD5);
+
+        getContentPane().add(new JLabel("fileSize：", SwingConstants.CENTER ));
+        fileSize = new JLabel("fileSize");
+        getContentPane().add(fileSize);
+
+        getContentPane().add(new JLabel("   ", SwingConstants.CENTER ));
+        noneline = new JLabel(" ");
+        getContentPane().add(noneline);
+
         getContentPane().add(EnterBtn);
         getContentPane().add(EmptyBtn);
 
@@ -87,7 +115,7 @@ public class MainUI extends JFrame implements ActionListener  {
         this.setJMenuBar(menuBar);	//设置菜单栏
         this.setLayout(new GridLayout(0,2));    //选择GridLayout布局管理器
         this.setTitle("iOS-checkIPA");
-        this.setSize(700,400);
+        this.setSize(700,500);
         this.setLocation(0, 0);
         this.setLocationRelativeTo(null);//窗体居中显示
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    //设置当关闭窗口时，保证JVM也退出
@@ -121,12 +149,14 @@ public class MainUI extends JFrame implements ActionListener  {
             getFilePath();  // 获取文件路径
             String filePath = ipaInfo.getFilePath();
 
+
             if ( filePath == null ){    //判断路径和文件是否为空，或非ipa后缀文件
                 JOptionPane.showMessageDialog(null,"读取ipa文件异常，请切换文件或替换文件目录后重试。","提示消息",JOptionPane.WARNING_MESSAGE);
                 return;
             } else {
-                File files = new File(filePath);    // 获取ipa文件路径
                 try {
+                    FileUtils.getFileSize(filePath);    // 获取文件信息
+                    File files = new File(filePath);    // 获取ipa文件路径
                     IpaUtil.getIpaMobileProvisio(files);    // 获取并分析文件信息
                 } catch (Exception e1) {
                     JOptionPane.showMessageDialog(null,"读取ipa文件异常，请切换文件或替换文件目录后重试。","提示消息",JOptionPane.WARNING_MESSAGE);
@@ -144,6 +174,11 @@ public class MainUI extends JFrame implements ActionListener  {
                 UUID.setText(ipaInfo.getUUID());
                 TeamName.setText(ipaInfo.getTeamName());
                 ExpirationDate.setText(ipaInfo.getExpirationDate());
+
+                filePaths.setText(ipaInfo.getFilePath());
+                fileMD5.setText(ipaInfo.getFileMD5());
+                fileSize.setText( ipaInfo.getFileSizeByte() + " 字节（" + ipaInfo.getFileSizeMB() + " MB）"  );
+
                 return;
             }
 
@@ -161,9 +196,14 @@ public class MainUI extends JFrame implements ActionListener  {
             minSdk.setText("NaN");
             provisionName.setText("NaN");
             AppIDName.setText("NaN");
-            UUID.setText("Nan");
-            TeamName.setText("Nan");
-            ExpirationDate.setText("Nan");
+            UUID.setText("NaN");
+            TeamName.setText("NaN");
+            ExpirationDate.setText("NaN");
+
+            filePaths.setText("NaN");
+            fileMD5.setText("NaN");
+            fileSize.setText("NaN");
+
             return;
 
         }

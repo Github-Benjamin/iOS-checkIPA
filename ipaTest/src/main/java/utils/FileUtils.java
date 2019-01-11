@@ -1,8 +1,10 @@
 package utils;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import vo.ipaInfo;
 
 import java.io.*;
+import java.text.DecimalFormat;
 
 /**
  * Created by Benjamin on 2019/1/9.
@@ -58,6 +60,32 @@ public class FileUtils {
         }
         else{
             ipaInfo.setFilePath( null );
+        }
+
+    }
+
+    // 获取文件MD5
+    public static void getFileMD5(String filename) throws IOException {
+        // 设置文件MD5值
+        String fileMD5 = DigestUtils.md5Hex(new FileInputStream(filename));
+        ipaInfo.setFileMD5(fileMD5);
+
+    }
+
+    // 获取文件大小
+    public static void getFileSize(String filename) throws IOException {
+
+        getFileMD5(filename); // 获取文件MD5
+
+        File file = new File(filename);
+        if (file.exists() && file.isFile()) {
+
+            long filelen = file.length();
+            float num= (float)filelen/1024/1024;
+            DecimalFormat df = new DecimalFormat("0.00");   //格式化小数
+
+            ipaInfo.setFileSizeByte(String.valueOf(filelen));
+            ipaInfo.setFileSizeMB(df.format(num));
         }
 
     }

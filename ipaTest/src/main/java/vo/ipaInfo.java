@@ -17,8 +17,13 @@ public class ipaInfo {
     public static String UUID;
     public static String TeamName;
     public static String ExpirationDate;
+
     public static String filePath;
     public static File mobileprovision;
+
+    public static String fileMD5;
+    public static String fileSizeByte;
+    public static String fileSizeMB;
 
 
     public static String getAppName() {
@@ -115,5 +120,29 @@ public class ipaInfo {
 
     public static void setMobileprovision(File mobileprovision) {
         ipaInfo.mobileprovision = mobileprovision;
+    }
+
+    public static String getFileMD5() {
+        return fileMD5;
+    }
+
+    public static void setFileMD5(String fileMD5) {
+        ipaInfo.fileMD5 = fileMD5;
+    }
+
+    public static String getFileSizeByte() {
+        return fileSizeByte;
+    }
+
+    public static void setFileSizeByte(String fileSizeByte) {
+        ipaInfo.fileSizeByte = fileSizeByte;
+    }
+
+    public static String getFileSizeMB() {
+        return fileSizeMB;
+    }
+
+    public static void setFileSizeMB(String fileSizeMB) {
+        ipaInfo.fileSizeMB = fileSizeMB;
     }
 }
