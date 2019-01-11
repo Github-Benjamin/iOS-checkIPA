@@ -1,5 +1,7 @@
 package utils;
 
+import vo.ipaInfo;
+
 import java.io.*;
 
 /**
@@ -11,11 +13,21 @@ public class FileUtils {
     public static void fileDelet(File filename){
         // 如果有必要，应该删除解压的结果文件
         boolean result = filename.delete();
-        if (!result) {
-            System.gc();    // 强制解除对文件的占用,回收资源
-            filename.delete();
+
+        int tryCount = 0;
+        while(!result && tryCount++ < 3 )
+        {
+            System.gc();
+            result = filename.delete();
         }
+
+//        if ( !result ) {
+//            System.gc();    // 强制解除对文件的占用,回收资源
+//            filename.delete();
+//        }
+
         filename.getParentFile().delete();
+
     }
 
     // 读文件并以字符串形式返回
@@ -35,5 +47,20 @@ public class FileUtils {
 
         return filedata;
     }
+
+    public static void fileName(String dirpath,String filename){
+
+        if ( filename.substring(filename.length() - 3).equals("ipa") ){ //文件后缀名是否包含 ipa
+            ipaInfo.setFilePath( dirpath + filename );
+        }else if (dirpath == null || filename == null){   //判断路径和文件是否为空
+            ipaInfo.setFilePath( null );
+        }
+        else{
+            ipaInfo.setFilePath( null );
+        }
+
+    }
+
+
 
 }

@@ -2,6 +2,7 @@
  * Created by Benjamin on 2018/12/2.
  */
 
+import utils.FileUtils;
 import utils.IpaUtil;
 import vo.ipaInfo;
 
@@ -27,7 +28,7 @@ public class MainUI extends JFrame implements ActionListener  {
     {
 
         // 创建组件并设置监听
-        EnterBtn = new JButton("获取设备信息");
+        EnterBtn = new JButton("获取IPA信息");
         EmptyBtn = new JButton("清空");
         EnterBtn.addActionListener(this);
         EmptyBtn.addActionListener(this);
@@ -115,19 +116,20 @@ public class MainUI extends JFrame implements ActionListener  {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        if(e.getActionCommand()=="获取设备信息") {
+        if(e.getActionCommand()=="获取IPA信息") {
 
             getFilePath();  // 获取文件路径
             String filePath = ipaInfo.getFilePath();
-            if ( filePath == null ){    //判断路径和文件是否为空
-                // JOptionPane.showMessageDialog(null,"选择文件异常，请重新选择文件","提示消息",JOptionPane.WARNING_MESSAGE);
+
+            if ( filePath == null ){    //判断路径和文件是否为空，或非ipa后缀文件
+                JOptionPane.showMessageDialog(null,"读取ipa文件异常，请切换文件或替换文件目录后重试。","提示消息",JOptionPane.WARNING_MESSAGE);
                 return;
             } else {
                 File files = new File(filePath);    // 获取ipa文件路径
                 try {
                     IpaUtil.getIpaMobileProvisio(files);    // 获取并分析文件信息
                 } catch (Exception e1) {
-                    JOptionPane.showMessageDialog(null,"读取ipa文件异常，请联系作者：benjamin_v@qq.com","提示消息",JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null,"读取ipa文件异常，请切换文件或替换文件目录后重试。","提示消息",JOptionPane.WARNING_MESSAGE);
                     e1.printStackTrace();
                     return;
                 }
@@ -174,12 +176,7 @@ public class MainUI extends JFrame implements ActionListener  {
         String dirpath = openDia.getDirectory();    //获取打开文件路径并保存到字符串中。
         String fileName = openDia.getFile();    //获取打开文件名称并保存到字符串中
         // System.out.println(dirpath+fileName);    // 打印获取到的文件路径
-        if (dirpath == null || fileName == null){   //判断路径和文件是否为空
-            return;
-        }else {
-            ipaInfo.setFilePath(dirpath+fileName);
-            return;
-        }
+        FileUtils.fileName(dirpath,fileName);  // 判断文件后缀
     }
 
 
