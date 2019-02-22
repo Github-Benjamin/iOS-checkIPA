@@ -24,6 +24,7 @@ public class IpaUtil {
     private static String reUUID = "<key>UUID</key>.*?<string>(.*?)</string>";
     private static String reTeamName = "<key>TeamName</key>.*?<string>(.*?)</string>";
     private static String reExpirationDate = "<key>ExpirationDate</key>.*?<date>(.*?)</date>";
+    private static String notFoundFile = "ipa no embedded.mobileprovision file";
 
     /**
      * 解压IPA文件，只获取IPA文件中的Info.plist、embedded.mobileprovision文件存储指定位置
@@ -207,30 +208,42 @@ public class IpaUtil {
         // 解压文件 Info.plist、embedded.mobileprovision，解析Info.plist文件并获取embedded.mobileprovision文件中的信息
         getIpaInfoMap(ipa);
 
-        // 获取文件并以字符串的形式返回
-        File filename = ipaInfo.getMobileprovision();
-        String filedata = FileUtils.fileRead(filename);
+        try {
 
-        // 正则匹配Body字段
-        String dictData = ReUtils.findString(filedata,reBody);
+            // 获取文件并以字符串的形式返回
+            File filename = ipaInfo.getMobileprovision();
+            String filedata = FileUtils.fileRead(filename);
 
-        // 匹配 provisionName
-        ipaInfo.setProvisionName(ReUtils.findString(dictData,reprovisionName));
+            // 正则匹配Body字段
+            String dictData = ReUtils.findString(filedata,reBody);
 
-        // 匹配 reAppIDName
-        ipaInfo.setAppIDName(ReUtils.findString(dictData,reAppIDName));
+            // 匹配 provisionName
+            ipaInfo.setProvisionName(ReUtils.findString(dictData,reprovisionName));
 
-        // 匹配 UUID
-        ipaInfo.setUUID(ReUtils.findString(dictData,reUUID).replaceAll("-",""));
+            // 匹配 reAppIDName
+            ipaInfo.setAppIDName(ReUtils.findString(dictData,reAppIDName));
 
-        // 匹配 reTeamName
-        ipaInfo.setTeamName(ReUtils.findString(dictData,reTeamName));
+            // 匹配 UUID
+            ipaInfo.setUUID(ReUtils.findString(dictData,reUUID).replaceAll("-",""));
 
-        // 匹配 reExpirationDate
-        ipaInfo.setExpirationDate(ReUtils.findString(dictData,reExpirationDate));
+            // 匹配 reTeamName
+            ipaInfo.setTeamName(ReUtils.findString(dictData,reTeamName));
 
-        // 如果有必要，应该删除解压的结果文件
-        FileUtils.fileDelet(filename);
+            // 匹配 reExpirationDate
+            ipaInfo.setExpirationDate(ReUtils.findString(dictData,reExpirationDate));
+
+            // 如果有必要，应该删除解压的结果文件
+            FileUtils.fileDelet(filename);
+        }catch(Exception e){
+
+            ipaInfo.setProvisionName(notFoundFile);
+            ipaInfo.setAppIDName(notFoundFile);
+            ipaInfo.setUUID(notFoundFile);
+            ipaInfo.setTeamName(notFoundFile);
+            ipaInfo.setExpirationDate(notFoundFile);
+
+            e.printStackTrace();
+        }
 
     }
 
