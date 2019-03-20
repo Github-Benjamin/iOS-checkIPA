@@ -17,7 +17,7 @@ public class FileUtils {
         boolean result = filename.delete();
 
         int tryCount = 0;
-        while(!result && tryCount++ < 3 )
+        while(!result && tryCount++ < 6 )
         {
             System.gc();
             result = filename.delete();
